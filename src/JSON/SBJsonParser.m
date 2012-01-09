@@ -453,11 +453,12 @@ static char ctrl[0x22];
         skipDigits(c);
     }
     
-    id str = [[NSString alloc] initWithBytesNoCopy:(char*)ns
-                                            length:c - ns
-                                          encoding:NSUTF8StringEncoding
-                                      freeWhenDone:NO];
-    [str autorelease];
+    id str = 
+    [[[NSString alloc] 
+      initWithBytesNoCopy:(char*)ns length:c - ns encoding:NSUTF8StringEncoding
+      freeWhenDone:NO]
+     autorelease];
+    
     if (str && (*o = [NSDecimalNumber decimalNumberWithString:str]))
         return YES;
     
