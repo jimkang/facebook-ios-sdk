@@ -38,7 +38,7 @@ static void *finishedContext = @"finishedContext";
 @interface Facebook ()
 
 // private properties
-@property(nonatomic, retain) NSArray* permissions;
+@property(nonatomic, strong) NSArray* permissions;
 @property(nonatomic, copy) NSString* appId;
 
 @end
@@ -111,15 +111,6 @@ static void *finishedContext = @"finishedContext";
   for (FBRequest* _request in _requests) {
     [_request removeObserver:self forKeyPath:requestFinishedKeyPath];
   }
-  [_accessToken release];
-  [_expirationDate release];
-  [_requests release];
-  [_loginDialog release];
-  [_fbDialog release];
-  [_appId release];
-  [_permissions release];
-  [_urlSchemeSuffix release];
-  [super dealloc];
 }
 
 - (void)invalidateSession {
@@ -254,7 +245,6 @@ static void *finishedContext = @"finishedContext";
   // If single sign-on failed, open an inline login dialog. This will require the user to
   // enter his or her credentials.
   if (!didOpenOtherApp) {
-    [_loginDialog release];
     _loginDialog = [[FBLoginDialog alloc] initWithURL:loginDialogURL
                                           loginParams:params
                                              delegate:self];
@@ -267,7 +257,7 @@ static void *finishedContext = @"finishedContext";
  */
 - (NSDictionary*)parseURLParams:(NSString *)query {
 	NSArray *pairs = [query componentsSeparatedByString:@"&"];
-	NSMutableDictionary *params = [[[NSMutableDictionary alloc] init] autorelease];
+	NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
 	for (NSString *pair in pairs) {
 		NSArray *kv = [pair componentsSeparatedByString:@"="];
 		NSString *val =
@@ -608,7 +598,6 @@ static void *finishedContext = @"finishedContext";
      andParams:(NSMutableDictionary *)params
    andDelegate:(id <FBDialogDelegate>)delegate {
 
-  [_fbDialog release];
 
   NSString *dialogURL = [kDialogBaseURL stringByAppendingString:action];
   [params setObject:@"touch" forKey:@"display"];
